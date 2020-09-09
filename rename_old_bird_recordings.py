@@ -42,7 +42,7 @@ def _transform_file_name(file_name):
 
         (year, month, day, hour, minute, second) = m.groups()
 
-        station = 'NBNC'
+        station = '1'
 
         if month == 'Aug':
             month  = 8
