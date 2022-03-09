@@ -30,8 +30,8 @@ def _rename_file(file_name):
     else:
         print('renaming "{}" to "{}"...'.format(file_name, new_file_name))
         os.rename(file_name, new_file_name)
-        print('attempting to copy "{}"...'.format(file_name))
-        shutil.copy2(file_name, '/Users/richard/Sound/edinburgh-nocmig/Recordings/')
+        print('attempting to copy "{}"...'.format(new_file_name))
+        shutil.copy2(os.getcwd() + '/' + new_file_name, '/Users/richard/Sound/edinburgh-nocmig/Recordings/')
 
 
 def _transform_file_name(file_name):
