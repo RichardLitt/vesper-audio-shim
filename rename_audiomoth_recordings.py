@@ -33,7 +33,8 @@ def _rename_file(file_name, args):
         os.rename(file_name, new_file_name)
         print('attempting to copy "{}"...'.format(new_file_name))
         # Make this an arg
-        shutil.copy2(os.getcwd() + '/' + new_file_name, args.inputDirectory)
+        ## This copies to another directory. but it only _copies_, it doesn't move.
+        # shutil.copy2(os.getcwd() + '/' + new_file_name, args.outputDirectory)
 
 
 def _transform_file_name(file_name, args):
@@ -67,8 +68,8 @@ def create_arg_parser():
     parser = argparse.ArgumentParser(description='Description of your app.')
     parser.add_argument('station',
                     help='Station name')
-    parser.add_argument('inputDirectory',
-                    help='Path to the input directory.')
+    parser.add_argument('outputDirectory',
+                    help='Path to the copy output directory.')
     # parser.add_argument('--tz',
     #                 help='Time zone (Default: UTC).')
     return parser
@@ -77,7 +78,7 @@ def create_arg_parser():
 if __name__ == "__main__":
     arg_parser = create_arg_parser()
     parsed_args = arg_parser.parse_args(sys.argv[1:])
-    if os.path.exists(parsed_args.inputDirectory):
+    if os.path.exists(parsed_args.outputDirectory):
         _main(parsed_args)
     else:
         print('Path not specified')
