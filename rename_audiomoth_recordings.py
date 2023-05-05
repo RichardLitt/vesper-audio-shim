@@ -3,6 +3,7 @@ import sys
 import argparse
 import os
 import re
+# TODO Update to updated timezone dep
 import pytz
 import shutil
 
@@ -11,7 +12,8 @@ import shutil
 _FILE_NAME_RE = re.compile(
     r'^(\d\d\d\d)(\d\d)(\d\d)_(\d\d)(\d\d)(\d\d)\.WAV$')
 
-# Make this an arg
+# TODO Make this an arg
+# May not be necessary - Audiomoth always records in Z, and Vesper can always read Z. 
 _TIME_ZONE = pytz.timezone('Europe/London')
 
 
@@ -26,14 +28,18 @@ def _rename_files(dir_path, args):
 
 def _rename_file(file_name, args):
     new_file_name = _transform_file_name(file_name, args)
+    # TODO Should find a way to make this not brittle
+    # new_file_name = args.outputDirectory + new_file_name
+    # Another option
+    # new_file_name = 'Renamed recordings/' + new_file_name
     if new_file_name is None:
         print('skipping "{}"...'.format(file_name))
     else:
         print('renaming "{}" to "{}"...'.format(file_name, new_file_name))
         os.rename(file_name, new_file_name)
         print('attempting to copy "{}"...'.format(new_file_name))
-        # Make this an arg
-        ## This copies to another directory. but it only _copies_, it doesn't move.
+        ## TODO Re-add with logic
+        # This copies to another directory. but it only _copies_, it doesn't move.
         # shutil.copy2(os.getcwd() + '/' + new_file_name, args.outputDirectory)
 
 
@@ -64,12 +70,16 @@ def _transform_file_name(file_name, args):
 
 def create_arg_parser():
     # Creates and returns the ArgumentParser object
-
     parser = argparse.ArgumentParser(description='Description of your app.')
     parser.add_argument('station',
                     help='Station name')
-    parser.add_argument('outputDirectory',
-                    help='Path to the copy output directory.')
+    # TODO Implement
+    parser.add_argument('--copy',
+                    help='Copy the contents instead of moving them')
+    # TODO Check renaming
+    parser.add_argument('--dst',
+                    help='Path to the output directory.')
+    # TODO Implement
     # parser.add_argument('--tz',
     #                 help='Time zone (Default: UTC).')
     return parser
@@ -78,7 +88,4 @@ def create_arg_parser():
 if __name__ == "__main__":
     arg_parser = create_arg_parser()
     parsed_args = arg_parser.parse_args(sys.argv[1:])
-    if os.path.exists(parsed_args.outputDirectory):
-        _main(parsed_args)
-    else:
-        print('Path not specified')
+    _main(parsed_args)
